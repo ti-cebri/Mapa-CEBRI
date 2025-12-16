@@ -2,11 +2,21 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Mapa - CEBRI</title>
     <style>
       /* --- ESTILOS GERAIS --- */
-      * { box-sizing: border-box; margin: 0; padding: 0; outline: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        outline: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -15,15 +25,18 @@
         flex-direction: column;
         align-items: center;
         height: 100vh;
-        overflow: hidden; 
+        overflow: hidden;
         overscroll-behavior: none;
       }
 
       /* --- LOADER --- */
       #loader {
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(255,255,255,0.9);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
         z-index: 2000;
         display: flex;
         flex-direction: column;
@@ -42,7 +55,14 @@
         animation: spin 1s linear infinite;
         margin-bottom: 15px;
       }
-      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
       /* --- MENU DE SELEÇÃO --- */
       #menu-screen {
@@ -53,36 +73,36 @@
         height: 100%;
         width: 100%;
         position: absolute;
-        background: #ececec; 
+        background: #ececec;
         z-index: 50;
         padding: 20px;
       }
 
       .menu-logo {
-        width: 500px;       
-        max-width: 100%;     
+        width: 500px;
+        max-width: 100%;
         height: auto;
-        margin-bottom: 40px; 
+        margin-bottom: 40px;
       }
 
       .menu-btn {
-        background-color: #293e50; 
+        background-color: #293e50;
         color: white;
         border: none;
-        padding: 12px 30px;       
-        font-size: 1.2rem;        
+        padding: 12px 30px;
+        font-size: 1.2rem;
         border-radius: 8px;
         cursor: pointer;
-        margin-bottom: 15px;      
-        width: 100%;             
+        margin-bottom: 15px;
+        width: 100%;
         max-width: 300px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s, background-color 0.2s;
       }
 
-      .menu-btn:hover { 
-        background-color: #1f2f3d; 
-        transform: translateY(-2px); 
+      .menu-btn:hover {
+        background-color: #1f2f3d;
+        transform: translateY(-2px);
       }
 
       /* --- TELA DO MAPA --- */
@@ -93,8 +113,10 @@
         position: relative;
         background-color: #cdcdcd;
       }
-      
-      .hidden { display: none !important; }
+
+      .hidden {
+        display: none !important;
+      }
 
       /* Barra Superior */
       .top-bar {
@@ -104,10 +126,10 @@
         z-index: 100;
         display: flex;
         gap: 10px;
-        background: rgba(255,255,255,0.95);
+        background: rgba(255, 255, 255, 0.95);
         padding: 10px;
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         flex-wrap: wrap;
       }
 
@@ -121,10 +143,16 @@
         font-weight: bold;
         font-size: 0.9rem;
       }
-      .btn-reset { background-color: #0056b3; }
+      .btn-reset {
+        background-color: #0056b3;
+      }
 
       .instructions {
-        font-size: 0.8rem; color: #555; margin-left: 10px; display: flex; align-items: center;
+        font-size: 0.8rem;
+        color: #555;
+        margin-left: 10px;
+        display: flex;
+        align-items: center;
       }
 
       #map-title {
@@ -132,10 +160,10 @@
         top: 20px;
         right: 20px;
         z-index: 90;
-        background: rgba(255,255,255,0.95);
+        background: rgba(255, 255, 255, 0.95);
         padding: 10px 20px;
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         font-weight: bold;
         color: #333;
         font-size: 1rem;
@@ -146,33 +174,12 @@
         text-overflow: ellipsis;
       }
 
-      /* Zoom Controls */
-      .zoom-controls {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        z-index: 100;
-      }
-
-      .zoom-btn {
-        width: 40px; height: 40px;
-        background: white; border: none; border-radius: 50%;
-        font-size: 24px; font-weight: bold; color: #333;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        cursor: pointer; display: flex; align-items: center; justify-content: center;
-      }
-      .zoom-btn:active { background: #eee; }
-
       /* Legenda */
       .legend-container {
         position: absolute;
         background: rgba(255, 255, 255, 0.98);
         border-radius: 8px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         z-index: 110;
         display: flex;
         flex-direction: column;
@@ -181,122 +188,221 @@
       }
 
       .legend-header {
-        background: #eee; padding: 12px; font-weight: bold; text-align: center;
-        border-bottom: 1px solid #ccc; color: #333; font-size: 0.9rem;
-        cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+        background: #eee;
+        padding: 12px;
+        font-weight: bold;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+        color: #333;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
-      .legend-header::after { content: '▼'; font-size: 0.8rem; transition: transform 0.3s; }
-      .legend-container.collapsed .legend-header::after { transform: rotate(-90deg); }
-      .legend-container.collapsed .legend-list { display: none; }
-      .legend-container.collapsed { height: auto; }
+      .legend-header::after {
+        content: "▼";
+        font-size: 0.8rem;
+        transition: transform 0.3s;
+      }
+      .legend-container.collapsed .legend-header::after {
+        transform: rotate(-90deg);
+      }
+      .legend-container.collapsed .legend-list {
+        display: none;
+      }
+      .legend-container.collapsed {
+        height: auto;
+      }
 
       .legend-list {
-        overflow-y: auto; padding: 0; margin: 0; list-style: none;
+        overflow-y: auto;
+        padding: 0;
+        margin: 0;
+        list-style: none;
       }
 
       .legend-item {
-        padding: 10px 15px; border-bottom: 1px solid #f0f0f0;
-        cursor: pointer; font-size: 14px; transition: background 0.2s;
-        display: flex; align-items: center; justify-content: space-between;
+        padding: 10px 15px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
-      .legend-item:hover { background-color: #f9f9f9; }
-      .legend-item.active { background-color: #0056b3; color: white; font-weight: bold; }
+      .legend-item:hover {
+        background-color: #f9f9f9;
+      }
+      .legend-item.active {
+        background-color: #0056b3;
+        color: white;
+        font-weight: bold;
+      }
 
       /* RESPONSIVIDADE */
       @media (min-width: 769px) {
-        .legend-container { 
-            top: auto; 
-            bottom: 20px; 
-            left: auto; 
-            right: 20px; 
-            width: 260px; 
-            max-height: 50%; 
+        .legend-container {
+          top: auto;
+          bottom: 20px;
+          left: auto;
+          right: 20px;
+          width: 260px;
+          max-height: 50%;
         }
-        .legend-header::after { display: none; }
-        .zoom-controls { display: none; }
+        .legend-header::after {
+          display: none;
+        }
       }
 
       @media (max-width: 768px) {
-        .top-bar { top: 0; left: 0; width: 100%; border-radius: 0; padding: 5px; justify-content: space-between; }
-        .control-btn { padding: 6px 10px; font-size: 0.8rem; }
-        .instructions { display: none; }
-        #map-title { top: 50px; right: 10px; background: rgba(255,255,255,0.8); font-size: 0.8rem; }
-        .legend-container { bottom: 0; left: 0; right: 0; top: auto; width: 100%; border-radius: 15px 15px 0 0; max-height: 50%; }
-        .legend-list { max-height: 40vh; }
+        .top-bar {
+          top: 0;
+          left: 0;
+          width: 100%;
+          border-radius: 0;
+          padding: 5px;
+          justify-content: space-between;
+        }
+        .control-btn {
+          padding: 6px 10px;
+          font-size: 0.8rem;
+        }
+        .instructions {
+          display: none;
+        }
+        #map-title {
+          top: 50px;
+          right: 10px;
+          background: rgba(255, 255, 255, 0.8);
+          font-size: 0.8rem;
+        }
+        .legend-container {
+          bottom: 0;
+          left: 0;
+          right: 0;
+          top: auto;
+          width: 100%;
+          border-radius: 15px 15px 0 0;
+          max-height: 50%;
+        }
+        .legend-list {
+          max-height: 40vh;
+        }
       }
 
       /* VIEWPORT DO MAPA */
       .map-viewport {
-        width: 100%; height: 100%; overflow: hidden;
-        cursor: grab; position: relative; touch-action: none;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        cursor: grab;
+        position: relative;
+        touch-action: none;
       }
-      .map-viewport:active { cursor: grabbing; }
+      .map-viewport:active {
+        cursor: grabbing;
+      }
 
       .map-content {
-        position: absolute; top: 0; left: 0;
-        transform-origin: 0 0; 
-        box-shadow: 0 0 50px rgba(0,0,0,0.5); 
-        background-color: white; will-change: transform;
-        opacity: 0; 
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-origin: 0 0;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        background-color: white;
+        will-change: transform;
+        opacity: 0;
         transition: opacity 0.5s ease;
       }
-      .map-content.loaded { opacity: 1; }
+      .map-content.loaded {
+        opacity: 1;
+      }
 
       .map-image {
-        display: block; width: 100%; height: 100%;
-        pointer-events: none; 
-        image-rendering: -webkit-optimize-contrast; 
+        display: block;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        image-rendering: -webkit-optimize-contrast;
       }
 
       .map-overlay {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
       }
 
       .room {
-        fill: rgba(100, 255, 100, 0.15); stroke: #333; stroke-width: 2px;
-        cursor: pointer; vector-effect: non-scaling-stroke; transition: fill 0.1s;
+        fill: rgba(100, 255, 100, 0.15);
+        stroke: #333;
+        stroke-width: 2px;
+        cursor: pointer;
+        vector-effect: non-scaling-stroke;
+        transition: fill 0.1s;
       }
-      .room:hover, .room:active { fill: rgba(255, 140, 0, 0.6); stroke: #000; stroke-width: 5px; }
-      .room.active { fill: rgba(255, 140, 0, 0.8) !important; stroke: #000 !important; stroke-width: 5px !important; }
-      .map-border { fill: none; stroke: #000; stroke-width: 5px; pointer-events: none; vector-effect: non-scaling-stroke; }
+      .room:hover,
+      .room:active {
+        fill: rgba(255, 140, 0, 0.6);
+        stroke: #000;
+        stroke-width: 5px;
+      }
+      .room.active {
+        fill: rgba(255, 140, 0, 0.8) !important;
+        stroke: #000 !important;
+        stroke-width: 5px !important;
+      }
+      .map-border {
+        fill: none;
+        stroke: #000;
+        stroke-width: 5px;
+        pointer-events: none;
+        vector-effect: non-scaling-stroke;
+      }
 
       #tooltip {
-        position: fixed; display: none; background: rgba(0, 0, 0, 0.9);
-        color: #fff; padding: 8px 12px; border-radius: 4px; font-size: 14px;
-        pointer-events: none; z-index: 200;
+        position: fixed;
+        display: none;
+        background: rgba(0, 0, 0, 0.9);
+        color: #fff;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        pointer-events: none;
+        z-index: 200;
       }
     </style>
   </head>
   <body>
-
     <div id="loader">
-        <div class="spinner"></div>
-        <div>Carregando Mapa...</div>
+      <div class="spinner"></div>
+      <div>Carregando Mapa...</div>
     </div>
 
     <div id="menu-screen">
       <img src="TelaLogoCEBRI.png" alt="CEBRI Logo" class="menu-logo" />
       <button class="menu-btn" onclick="iniciarMapa('terreo')">Térreo</button>
-      <button class="menu-btn" onclick="iniciarMapa('pavimento1')">1º Andar</button>
+      <button class="menu-btn" onclick="iniciarMapa('pavimento1')">
+        1º Andar
+      </button>
     </div>
 
     <div id="map-screen">
       <div class="top-bar">
         <div>
-            <button class="control-btn" onclick="fecharMapa()">← Voltar</button>
-            <button class="control-btn btn-reset" onclick="centralizarMapa()">⟲ Centralizar</button>
+          <button class="control-btn" onclick="fecharMapa()">← Voltar</button>
+          <button class="control-btn btn-reset" onclick="centralizarMapa()">
+            ⟲ Centralizar
+          </button>
         </div>
-        <div class="instructions">
-            (Scroll p/ Zoom | Arraste p/ Mover)
-        </div>
+        <div class="instructions">(Scroll p/ Zoom | Arraste p/ Mover)</div>
       </div>
 
       <div id="map-title">Título do Mapa</div>
-      
-      <div class="zoom-controls">
-        <button class="zoom-btn" onclick="aplicarZoom(1)">+</button>
-        <button class="zoom-btn" onclick="aplicarZoom(-1)">−</button>
-      </div>
 
       <div class="legend-container" id="legend-container">
         <div class="legend-header" onclick="toggleLegenda()">Legenda</div>
@@ -305,8 +411,12 @@
 
       <div class="map-viewport" id="viewport">
         <div class="map-content" id="map-content">
-            <img id="img-fundo" src="" class="map-image" decoding="async" />
-            <svg id="svg-overlay" class="map-overlay" xmlns="http://www.w3.org/2000/svg"></svg>
+          <img id="img-fundo" src="" class="map-image" decoding="async" />
+          <svg
+            id="svg-overlay"
+            class="map-overlay"
+            xmlns="http://www.w3.org/2000/svg"
+          ></svg>
         </div>
       </div>
     </div>
@@ -318,7 +428,7 @@
       const dados = {
         terreo: {
           titulo: "Térreo",
-          imagem: "terreo.png", // Mantém PNG aqui, troca via JS se for mobile
+          imagem: "terreo.png",
           viewBox: "0 0 9918 7011",
           paths: `
             <path class="room" data-nome="Anexo/Hospedaria" d="M1443 3237L1156.5 3184.5L1154 5022.5L1607.5 5000L1443 3237Z"/>
@@ -346,11 +456,11 @@
             <path class="room" data-nome="Varanda" d="M7218 3202.5V3456L4969 3436.5V4985H3075V3429.5H3353V4729H4715.5V3202.5H7218Z"/>
             <path class="room" data-nome="Capela" d="M8054.5 2954.5V1958H9039.5V2954.5H8054.5Z"/>
             <path class="map-border" d="M0.5 7010V0.500732L9917 13.0007V7010H0.5Z"/>
-          `
+          `,
         },
         pavimento1: {
           titulo: "1º Andar",
-          imagem: "pavimento1.png", // Mantém PNG aqui, troca via JS se for mobile
+          imagem: "pavimento1.png",
           viewBox: "0 0 9942 7016",
           paths: `
             <path class="room" data-nome="Banheiro 06" d="M3820.5 3602.5H3573V3751.5H3820.5V3602.5Z"/>
@@ -370,165 +480,182 @@
             <path class="room" data-nome="Banheiro 05" d="M5871.5 2722H6043.5V2488.5H5875L5871.5 2722Z"/>
             <path class="room" data-nome="Sala de Projetos" d="M5854 2347H4390V2982H5854V2347Z"/>
             <path class="map-border" d="M0.5 7015V0.500122L9941 3.00012V7015H0.5Z"/>
-          `
-        }
+          `,
+        },
       };
 
       // --- ESTADO ---
-      let scale = 1; 
-      let pointX = 0; pointY = 0;
+      let scale = 1;
+      let pointX = 0;
+      pointY = 0;
       let isDragging = false;
-      let startX = 0; startY = 0;
+      let startX = 0;
+      startY = 0;
 
-      const viewport = document.getElementById('viewport');
-      const mapContent = document.getElementById('map-content');
-      const mapImage = document.getElementById('img-fundo');
-      const loader = document.getElementById('loader');
-      const tooltip = document.getElementById('tooltip');
-      const menuScreen = document.getElementById('menu-screen');
-      const mapScreen = document.getElementById('map-screen');
-      const legendList = document.getElementById('legend-list');
-      const legendContainer = document.getElementById('legend-container');
+      // Variáveis para Pinch (Zoom de dois dedos)
+      let initialPinchDistance = 0;
+      let initialScale = 1;
+
+      const viewport = document.getElementById("viewport");
+      const mapContent = document.getElementById("map-content");
+      const mapImage = document.getElementById("img-fundo");
+      const loader = document.getElementById("loader");
+      const tooltip = document.getElementById("tooltip");
+      const menuScreen = document.getElementById("menu-screen");
+      const mapScreen = document.getElementById("map-screen");
+      const legendList = document.getElementById("legend-list");
+      const legendContainer = document.getElementById("legend-container");
 
       function iniciarMapa(tipo) {
         const info = dados[tipo];
-        if(!info) return;
+        if (!info) return;
 
-        // 1. Mostrar Loader
-        loader.style.display = 'flex';
-        menuScreen.classList.add('hidden');
-        
-        // 2. Reset de variáveis
-        scale = 1; pointX = 0; pointY = 0;
-        legendList.innerHTML = '';
-        mapContent.classList.remove('loaded');
+        loader.style.display = "flex";
+        menuScreen.classList.add("hidden");
 
-        // Mobile check para fechar legenda
+        scale = 1;
+        pointX = 0;
+        pointY = 0;
+        legendList.innerHTML = "";
+        mapContent.classList.remove("loaded");
+
         if (window.innerWidth <= 768) {
-            legendContainer.classList.add('collapsed');
+          legendContainer.classList.add("collapsed");
         } else {
-            legendContainer.classList.remove('collapsed');
+          legendContainer.classList.remove("collapsed");
         }
 
-        const viewBoxValues = info.viewBox.split(' ').map(Number);
-        const mapWidth = viewBoxValues[2]; 
+        const viewBoxValues = info.viewBox.split(" ").map(Number);
+        const mapWidth = viewBoxValues[2];
         const mapHeight = viewBoxValues[3];
 
-        document.getElementById('map-title').innerText = info.titulo;
-        
-        // 3. LÓGICA DE TROCA DE IMAGEM (PNG vs WEBP)
+        document.getElementById("map-title").innerText = info.titulo;
+
+        // TROCA INTELIGENTE DE IMAGEM
         let imageSrc = info.imagem;
-        // Se a tela for menor que 768px (Mobile/Tablet Vertical), usa WebP
         if (window.innerWidth <= 768) {
-            // Substitui a extensão .png por .webp na string
-            imageSrc = imageSrc.replace('.png', '.webp');
-            console.log("Modo Mobile detectado: Carregando " + imageSrc);
+          imageSrc = imageSrc.replace(".png", ".webp");
         }
         mapImage.src = imageSrc;
-        
-        // Define tamanho
-        mapContent.style.width = mapWidth + 'px';
-        mapContent.style.height = mapHeight + 'px';
 
-        const svg = document.getElementById('svg-overlay');
-        svg.setAttribute('viewBox', info.viewBox);
+        mapContent.style.width = mapWidth + "px";
+        mapContent.style.height = mapHeight + "px";
+
+        const svg = document.getElementById("svg-overlay");
+        svg.setAttribute("viewBox", info.viewBox);
         svg.innerHTML = info.paths;
 
         gerarLegenda(svg);
 
-        // 4. Só exibe quando a imagem carregar
         mapImage.onload = () => {
-            loader.style.display = 'none';
-            mapScreen.style.display = 'block';
-            mapContent.classList.add('loaded'); 
-            centralizarMapa(mapWidth, mapHeight);
+          loader.style.display = "none";
+          mapScreen.style.display = "block";
+          mapContent.classList.add("loaded");
+          centralizarMapa(mapWidth, mapHeight);
         };
 
         if (mapImage.complete) {
-            mapImage.onload();
+          mapImage.onload();
         }
 
         configurarInteratividade();
       }
 
       function fecharMapa() {
-        mapScreen.style.display = 'none';
-        menuScreen.classList.remove('hidden');
-        tooltip.style.display = 'none';
-        mapImage.src = ""; // Limpa memória
+        mapScreen.style.display = "none";
+        menuScreen.classList.remove("hidden");
+        tooltip.style.display = "none";
+        mapImage.src = "";
       }
 
       function toggleLegenda() {
-        legendContainer.classList.toggle('collapsed');
+        legendContainer.classList.toggle("collapsed");
       }
 
       function gerarLegenda(svgElement) {
-        const rooms = Array.from(svgElement.querySelectorAll('.room'));
+        const rooms = Array.from(svgElement.querySelectorAll(".room"));
         rooms.sort((a, b) => {
-            const nomeA = a.getAttribute('data-nome').toUpperCase();
-            const nomeB = b.getAttribute('data-nome').toUpperCase();
-            return (nomeA < nomeB) ? -1 : (nomeA > nomeB) ? 1 : 0;
+          const nomeA = a.getAttribute("data-nome").toUpperCase();
+          const nomeB = b.getAttribute("data-nome").toUpperCase();
+          return nomeA < nomeB ? -1 : nomeA > nomeB ? 1 : 0;
         });
 
-        rooms.forEach(room => {
-            const nome = room.getAttribute('data-nome');
-            const li = document.createElement('li');
-            li.className = 'legend-item';
-            li.textContent = nome;
-            li.setAttribute('data-target-nome', nome);
-            li.addEventListener('click', () => { selecionarSalaPorNome(nome); });
-            legendList.appendChild(li);
+        rooms.forEach((room) => {
+          const nome = room.getAttribute("data-nome");
+          const li = document.createElement("li");
+          li.className = "legend-item";
+          li.textContent = nome;
+          li.setAttribute("data-target-nome", nome);
+
+          li.addEventListener("click", () => {
+            selecionarSalaPorNome(nome);
+          });
+          legendList.appendChild(li);
         });
       }
 
       function selecionarSalaPorNome(nomeAlvo) {
-        const svgRoom = document.querySelector(`.room[data-nome="${nomeAlvo}"]`);
-        const legendItem = document.querySelector(`.legend-item[data-target-nome="${nomeAlvo}"]`);
-        
-        if(!svgRoom || !legendItem) return;
+        const svgRoom = document.querySelector(
+          `.room[data-nome="${nomeAlvo}"]`
+        );
+        const legendItem = document.querySelector(
+          `.legend-item[data-target-nome="${nomeAlvo}"]`
+        );
 
-        const estaAtivo = svgRoom.classList.contains('active');
+        if (!svgRoom || !legendItem) return;
 
-        document.querySelectorAll('.room').forEach(r => r.classList.remove('active'));
-        document.querySelectorAll('.legend-item').forEach(l => l.classList.remove('active'));
+        const estaAtivo = svgRoom.classList.contains("active");
+
+        document
+          .querySelectorAll(".room")
+          .forEach((r) => r.classList.remove("active"));
+        document
+          .querySelectorAll(".legend-item")
+          .forEach((l) => l.classList.remove("active"));
 
         if (!estaAtivo) {
-            svgRoom.classList.add('active');
-            legendItem.classList.add('active');
-            legendItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          svgRoom.classList.add("active");
+          legendItem.classList.add("active");
+          legendItem.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
       }
 
       function configurarInteratividade() {
-        const rooms = document.querySelectorAll('.room');
-        rooms.forEach(room => {
-          room.addEventListener('mousemove', (e) => {
-            const nome = e.target.getAttribute('data-nome');
+        const rooms = document.querySelectorAll(".room");
+        rooms.forEach((room) => {
+          room.addEventListener("mousemove", (e) => {
+            const nome = e.target.getAttribute("data-nome");
             tooltip.innerText = nome;
-            tooltip.style.display = 'block';
-            tooltip.style.left = (e.clientX + 15) + 'px';
-            tooltip.style.top = (e.clientY + 15) + 'px';
+            tooltip.style.display = "block";
+            tooltip.style.left = e.clientX + 15 + "px";
+            tooltip.style.top = e.clientY + 15 + "px";
           });
 
-          room.addEventListener('mouseleave', () => {
-            tooltip.style.display = 'none';
+          room.addEventListener("mouseleave", () => {
+            tooltip.style.display = "none";
           });
 
-          room.addEventListener('click', (e) => {
-             if (isDragging) return; 
-             const nome = e.target.getAttribute('data-nome');
-             selecionarSalaPorNome(nome);
+          room.addEventListener("click", (e) => {
+            if (isDragging) return;
+            const nome = e.target.getAttribute("data-nome");
+            selecionarSalaPorNome(nome);
           });
-          
-          room.addEventListener('touchstart', (e) => {
-             if (isDragging) return; 
-             const nome = e.target.getAttribute('data-nome');
-             tooltip.innerText = nome;
-             tooltip.style.display = 'block';
-             const touch = e.touches[0];
-             tooltip.style.left = (touch.clientX + 10) + 'px';
-             tooltip.style.top = (touch.clientY - 30) + 'px';
-          }, {passive: true});
+
+          room.addEventListener(
+            "touchstart",
+            (e) => {
+              // Se tiver dois dedos, ignora clique (é zoom)
+              if (e.touches.length > 1) return;
+              if (isDragging) return;
+              const nome = e.target.getAttribute("data-nome");
+              tooltip.innerText = nome;
+              tooltip.style.display = "block";
+              const touch = e.touches[0];
+              tooltip.style.left = touch.clientX + 10 + "px";
+              tooltip.style.top = touch.clientY - 30 + "px";
+            },
+            { passive: true }
+          );
         });
       }
 
@@ -537,68 +664,71 @@
       }
 
       function centralizarMapa(w, h) {
-        if(!w) w = parseFloat(mapContent.style.width);
-        if(!h) h = parseFloat(mapContent.style.height);
+        if (!w) w = parseFloat(mapContent.style.width);
+        if (!h) h = parseFloat(mapContent.style.height);
 
         const rectViewport = viewport.getBoundingClientRect();
         const scaleX = rectViewport.width / w;
         const scaleY = rectViewport.height / h;
         scale = Math.min(scaleX, scaleY) * 0.95;
 
-        pointX = (rectViewport.width - (w * scale)) / 2;
-        pointY = (rectViewport.height - (h * scale)) / 2;
+        pointX = (rectViewport.width - w * scale) / 2;
+        pointY = (rectViewport.height - h * scale) / 2;
         updateTransform();
       }
 
-      function aplicarZoom(direcao) {
-        const step = 0.3;
-        const nextScale = scale + (direcao * step * scale);
-        if (nextScale > 5 || nextScale < 0.05) return;
-
-        const rect = viewport.getBoundingClientRect();
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const contentX = (centerX - pointX) / scale;
-        const contentY = (centerY - pointY) / scale;
-
-        pointX = centerX - (contentX * nextScale);
-        pointY = centerY - (contentY * nextScale);
-        scale = nextScale;
-        updateTransform();
+      // Funções auxiliares para matemática de distância
+      function getDistance(touch1, touch2) {
+        const dx = touch1.clientX - touch2.clientX;
+        const dy = touch1.clientY - touch2.clientY;
+        return Math.hypot(dx, dy);
       }
 
-      viewport.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        const delta = -Math.sign(e.deltaY);
-        const step = 0.15;
-        const nextScale = scale + (delta * step * scale);
-        if (nextScale > 5 || nextScale < 0.05) return;
+      function getMidpoint(touch1, touch2) {
+        return {
+          x: (touch1.clientX + touch2.clientX) / 2,
+          y: (touch1.clientY + touch2.clientY) / 2,
+        };
+      }
 
-        const rect = viewport.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
-        const contentX = (mouseX - pointX) / scale;
-        const contentY = (mouseY - pointY) / scale;
+      // MOUSE WHEEL (Desktop Zoom)
+      viewport.addEventListener(
+        "wheel",
+        (e) => {
+          e.preventDefault();
+          const delta = -Math.sign(e.deltaY);
+          const step = 0.15;
+          const nextScale = scale + delta * step * scale;
+          if (nextScale > 5 || nextScale < 0.05) return;
 
-        pointX = mouseX - (contentX * nextScale);
-        pointY = mouseY - (contentY * nextScale);
-        scale = nextScale;
-        updateTransform();
-      }, { passive: false });
+          const rect = viewport.getBoundingClientRect();
+          const mouseX = e.clientX - rect.left;
+          const mouseY = e.clientY - rect.top;
+          const contentX = (mouseX - pointX) / scale;
+          const contentY = (mouseY - pointY) / scale;
 
-      viewport.addEventListener('mousedown', (e) => {
+          pointX = mouseX - contentX * nextScale;
+          pointY = mouseY - contentY * nextScale;
+          scale = nextScale;
+          updateTransform();
+        },
+        { passive: false }
+      );
+
+      // MOUSE DRAG
+      viewport.addEventListener("mousedown", (e) => {
         isDragging = true;
         startX = e.clientX - pointX;
         startY = e.clientY - pointY;
-        viewport.style.cursor = 'grabbing';
+        viewport.style.cursor = "grabbing";
       });
 
-      window.addEventListener('mouseup', () => {
+      window.addEventListener("mouseup", () => {
         isDragging = false;
-        viewport.style.cursor = 'grab';
+        viewport.style.cursor = "grab";
       });
 
-      window.addEventListener('mousemove', (e) => {
+      window.addEventListener("mousemove", (e) => {
         if (!isDragging) return;
         e.preventDefault();
         pointX = e.clientX - startX;
@@ -606,26 +736,81 @@
         updateTransform();
       });
 
-      viewport.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
+      // --- TOUCH EVENTS (Mobile Drag & Pinch Zoom) ---
+
+      viewport.addEventListener(
+        "touchstart",
+        (e) => {
+          if (e.touches.length === 1) {
+            // Drag com um dedo
             isDragging = true;
             startX = e.touches[0].clientX - pointX;
             startY = e.touches[0].clientY - pointY;
-        }
-      }, { passive: false });
+          } else if (e.touches.length === 2) {
+            // Início do Pinch (dois dedos)
+            isDragging = false; // Para o drag para focar no zoom
+            initialPinchDistance = getDistance(e.touches[0], e.touches[1]);
+            initialScale = scale;
+          }
+        },
+        { passive: false }
+      );
 
-      viewport.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        if (e.touches.length === 1) {
-            e.preventDefault(); 
+      viewport.addEventListener(
+        "touchmove",
+        (e) => {
+          e.preventDefault(); // Impede scroll da página e comportamento nativo
+
+          if (e.touches.length === 1 && isDragging) {
+            // Mover (Drag)
             pointX = e.touches[0].clientX - startX;
             pointY = e.touches[0].clientY - startY;
             updateTransform();
-        }
-      }, { passive: false });
+          } else if (e.touches.length === 2) {
+            // Zoom (Pinch)
+            const currentDistance = getDistance(e.touches[0], e.touches[1]);
 
-      viewport.addEventListener('touchend', () => {
-        isDragging = false;
+            if (initialPinchDistance > 0) {
+              const pinchRatio = currentDistance / initialPinchDistance;
+              const nextScale = initialScale * pinchRatio;
+
+              // Limites de zoom
+              if (nextScale > 5 || nextScale < 0.05) return;
+
+              // Ponto central entre os dedos
+              const rect = viewport.getBoundingClientRect();
+              const mid = getMidpoint(e.touches[0], e.touches[1]);
+              const midX = mid.x - rect.left;
+              const midY = mid.y - rect.top;
+
+              // Matemática de zoom no ponto
+              const contentX = (midX - pointX) / scale;
+              const contentY = (midY - pointY) / scale;
+
+              pointX = midX - contentX * nextScale;
+              pointY = midY - contentY * nextScale;
+              scale = nextScale;
+
+              updateTransform();
+            }
+          }
+        },
+        { passive: false }
+      );
+
+      viewport.addEventListener("touchend", (e) => {
+        // Se levantou um dedo mas ainda tem outro, reinicia o drag para evitar pulo
+        if (e.touches.length === 1) {
+          isDragging = true;
+          startX = e.touches[0].clientX - pointX;
+          startY = e.touches[0].clientY - pointY;
+        } else {
+          isDragging = false;
+        }
+
+        if (e.touches.length < 2) {
+          initialPinchDistance = 0;
+        }
       });
     </script>
   </body>
